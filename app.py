@@ -1,106 +1,124 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from datetime import datetime
-import gspread
-from google.oauth2.service_account import Credentials
+from matplotlib.patches import Wedge
+import pandas as pd
 
-# --- 1. CONFIGURAZIONE PAGINA ---
-st.set_page_config(page_title="Autovalutazione Merito - GENERA", layout="centered")
+# --- 1. CONFIGURAZIONE E STILE ---
+st.set_page_config(page_title="GENERA - Autovalutazione Merito", layout="centered") # 
 
 # --- 2. LOGO E TITOLO ---
-# Centratura del logo tramite colonne
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
+col1, col_logo, col3 = st.columns([1, 2, 1])
+with col_logo:
     try:
+        # Centratura e dimensionamento del logo
         st.image("GENERA Logo Colore.png", use_container_width=True)
     except:
-        st.info("Nota: Carica 'GENERA Logo Colore.png' nella cartella GitHub per visualizzare il logo.")
+        st.info("Caricare 'GENERA Logo Colore.png' nella cartella principale.")
 
-st.markdown("<h1 style='text-align: center;'>Autovalutazione: La Gestione del Merito</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>L'Arte del Riconoscimento del Merito</h1>", unsafe_allow_html=True)
 
-# --- 3. INTRODUZIONE ---
+# --- 3. PARTE INTRODUTTIVA ---
 st.markdown("""
-### Perché questa autovalutazione?
-Il riconoscimento del merito non è un semplice premio, ma una **competenza strategica**. Saper distinguere tra ciò che è dovuto (necessità) e ciò che è valore aggiunto (opportunità) permette di alimentare la motivazione reale. 
+### L'importanza del Merito nella Motivazione
+Riconoscere il merito dei propri collaboratori non è un semplice accessorio, ma il cuore pulsante della motivazione. Saper dare un feedback circa il valore del contributo portato, distinguendo tra ciò che è **necessario** e ciò che è **opportuno**, e saper guidare il team attraverso il 'Perché' prima del 'Come', definisce la qualità della leadership.
 
-**Obiettivo:** Misurare la tua capacità di guidare i collaboratori attraverso la logica del 'Dove e Perché' e la tua prontezza nel validare la condotta opportuna.
+**Obiettivo:** Valutare la tua capacità di gestire il merito come leva strategica per il sostegno alla motivazione, lo sviluppo del talento e la tenuta del clima aziendale.
 """)
 
 # --- 4. INFORMAZIONI SOCIO-ANAGRAFICHE ---
-st.subheader("Profilo Compilatore")
+st.subheader("Profilo del Compilatore")
 with st.container():
     nome = st.text_input("Nome o Nickname")
-    genere = st.selectbox("Genere", ["maschile", "femminile", "non binario", "non risponde"])
-    eta = st.selectbox("Età", ["fino a 20 anni", "21-30 anni", "31-40 anni", "41-50 anni", "51-60 anni", "61-70 anni", "più di 70 anni"])
-    titolo_studio = st.selectbox("Titolo di studio", ["licenza media", "qualifica professionale", "diploma di maturità", "laurea triennale", "laurea magistrale (o ciclo unico)", "titolo post lauream"])
-    ruolo = st.selectbox("Ruolo professionale", ["imprenditore", "top manager", "middle manager", "impiegato", "operaio", "tirocinante", "libero professionista"])
+    genere = st.selectbox("Genere", ["Maschile", "Femminile", "Non binario", "Non risponde"])
+    eta = st.selectbox("Età", ["Fino a 20 anni", "21-30 anni", "31-40 anni", "41-50 anni", "51-60 anni", "61-70 anni", "Oltre 70 anni"])
+    titolo = st.selectbox("Titolo di studio", ["Licenza media", "Qualifica professionale", "Diploma di maturità", "Laurea triennale", "Laurea magistrale / Ciclo unico", "Post-lauream"])
+    ruolo = st.selectbox("Ruolo professionale", ["Imprenditore", "Top Manager", "Middle Manager", "Impiegato", "Operaio", "Tirocinante", "Libero Professionista"])
 
 # --- 5. QUESTIONARIO (12 ITEMS) ---
 st.divider()
-st.subheader("Questionario")
+st.subheader("Questionario di Autovalutazione")
 
 items = [
-    # Pilastro 1: Dove-Perché-Come
-    ("Prima di spiegare 'come' fare, chiarisco sempre il 'dove' (obiettivo strategico)?", "Strategia"),
-    ("Mi assicuro che il collaboratore comprenda il 'perché' di un compito prima di assegnarlo?", "Strategia"),
-    ("Dopo il 'come', dedico tempo a spiegare 'come posso fare così' (metodo e crescita)?", "Strategia"),
-    ("Verifico se la visione d'insieme è chiara prima di scendere nei dettagli operativi?", "Strategia"),
-    # Pilastro 2: Necessità vs Opportunità
-    ("Riesco a distinguere chiaramente tra un compito eseguito per dovere e uno di valore aggiunto?", "Discernimento"),
-    ("Valuto in modo differente l'adempimento necessario dalla condotta opportuna?", "Discernimento"),
-    ("Sono consapevole di quali compiti siano 'necessità' (non negoziabili) per il mio team?", "Discernimento"),
-    ("Saper cogliere un'opportunità di miglioramento è un criterio chiave della mia valutazione?", "Discernimento"),
-    # Pilastro 3: ASAP e Riconoscimento
-    ("Riconosco la condotta opportuna e il corretto adempimento prima di segnalare l'errore?", "Riconoscimento"),
-    ("Intervengo ASAP (immediatamente) quando rilevo una non conformità tecnica?", "Riconoscimento"),
-    ("Segnalo ASAP una condotta inopportuna per evitare che diventi una prassi?", "Riconoscimento"),
-    ("Il mio feedback inizia sempre validando ciò che è stato fatto bene e opportunamente?", "Riconoscimento")
+    # Area 1: Flusso Strategico (Dove-Perché-Come)
+    "Chiarisco il 'Dove' (obiettivo strategico) e il 'Perché' prima di spiegare il 'Come' operativo?",
+    "Mi assicuro che il collaboratore comprenda il senso profondo del suo compito prima di iniziare?",
+    "Dopo aver definito il 'Come', spiego 'come posso fare così' per favorire l'autonomia futura?",
+    "Verifico che la visione d'insieme sia chiara prima di scendere nei minimi dettagli tecnici?",
+    # Area 2: Necessità vs Opportunità
+    "Distinguo chiaramente tra un compito svolto per adempimento (necessità) e uno per iniziativa (opportunità)?",
+    "Sono consapevole delle conseguenze quando una 'necessità' non negoziabile viene ignorata?",
+    "Riconosco un valore superiore a chi coglie 'opportunità' di miglioramento oltre il dovuto?",
+    "Nelle valutazioni, separo il rispetto delle procedure dal valore aggiunto generato?",
+    # Area 3: ASAP e Riconoscimento
+    "Intervengo al più presto per correggere una non conformità tecnica rilevata?",
+    "Segnalo prontamente (ASAP) una condotta inopportuna prima che diventi una prassi?",
+    "Riconosco la condotta corretta e opportuna PRIMA di far notare eventuali errori?",
+    "Do priorità alla validazione del buon operato rispetto alla mera sanzione della svista?"
 ]
 
 mappa_punti = {"Mai": 1, "Quasi mai": 2, "Spesso": 3, "Sempre": 4}
 
-with st.form("valutazione_merito"):
-    risposte = []
-    for testo, cat in items:
-        scelta = st.select_slider(testo, options=["Mai", "Quasi mai", "Spesso", "Sempre"], key=testo)
-        risposte.append((cat, mappa_punti[scelta]))
+with st.form("assessment_form"): # [cite: 83-84]
+    punteggi = []
+    for i, testo in enumerate(items):
+        r = st.select_slider(f"{i+1}. {testo}", options=["Mai", "Quasi mai", "Spesso", "Sempre"], key=f"q{i}")
+        punteggi.append(mappa_punti[r])
     
-    submitted = st.form_submit_button("Invia e Visualizza Risultati")
+    submit = st.form_submit_button("Analizza il mio Profilo")
 
-# --- 6. ELABORAZIONE RISULTATI E FEEDBACK ---
-if submitted:
-    df_risposte = pd.DataFrame(risposte, columns=["Categoria", "Punteggio"])
-    score_totale = df_risposte["Punteggio"].sum()
-    medie = df_risposte.groupby("Categoria")["Punteggio"].mean()
+# --- 6. OUTPUT GRAFICO (TACHIMETRO) E FEEDBACK ---
+def draw_gauge(score):
+    fig, ax = plt.subplots(figsize=(8, 5), subplot_kw={'aspect': 'equal'})
+    # Mappatura score (12-48) su 0-180 gradi
+    if score <= 18: angle = (score - 12) / 6 * 45
+    elif score <= 30: angle = 45 + (score - 18) / 12 * 45
+    elif score <= 42: angle = 90 + (score - 30) / 12 * 45
+    else: angle = 135 + (score - 42) / 6 * 45
     
-    # Definizione Livelli
-    if score_totale <= 18:
-        livello = "Manager Reattivo"
-        desc = "Tendi a intervenire solo sull'errore. È opportuno lavorare sulla comunicazione del 'Perché' strategico."
-    elif score_totale <= 30:
-        livello = "Coordinatore Consapevole"
-        desc = "Distingui necessità e opportunità, ma il riconoscimento della condotta corretta deve diventare più tempestivo (ASAP)."
-    elif score_totale <= 42:
-        livello = "Leader Motivatore"
-        desc = "Ottima gestione del flusso 'Dove-Perché-Come'. Sei propenso a valorizzare il merito prima di correggere."
-    else:
-        livello = "Maestro del Merito"
-        desc = "Eccellenza assoluta. Il tuo approccio crea una cultura dove il merito è il motore della motivazione."
+    actual_angle = 180 - angle # Per orientamento da sinistra a destra
+    colors = ['#ff4b4b', '#ffa500', '#9acd32', '#008000']
+    labels = ['Operatore\nReattivo', 'Gestore\nConsapevole', 'Leader\nMotivatore', 'Maestro\ndel Merito']
 
-    # Feedback Visivo
+    for i, color in enumerate(colors):
+        ax.add_patch(Wedge((0, 0), 1, 180 - (i+1)*45, 180 - i*45, facecolor=color, alpha=0.4))
+        mid_a = 180 - (i * 45 + 22.5)
+        ax.text(1.2 * np.cos(np.radians(mid_a)), 1.2 * np.sin(np.radians(mid_a)), labels[i], 
+                ha='center', va='center', fontweight='bold', fontsize=9)
+
+    # Lancetta
+    ax.annotate('', xy=(0.9 * np.cos(np.radians(actual_angle)), 0.9 * np.sin(np.radians(actual_angle))), 
+                xytext=(0, 0), arrowprops=dict(arrowstyle="wedge,tail_width=0.5", color="black"))
+    ax.add_patch(plt.Circle((0, 0), 0.05, color='black'))
+
+    # Finestra Punti
+    ax.text(0, 0.25, f"PUNTI: {score}", ha='center', va='center', fontsize=18, fontweight='bold', 
+            bbox=dict(facecolor='white', alpha=0.9, edgecolor='black', boxstyle='round,pad=0.5'))
+
+    ax.set_xlim(-1.5, 1.5)
+    ax.set_ylim(-0.2, 1.5)
+    ax.axis('off')
+    return fig
+
+if submit:
+    totale = sum(punteggi)
     st.divider()
-    st.header(f"Profilo: {livello}")
-    st.write(f"**Analisi:** {desc}")
-
-    # Grafico a barre per categorie
-    fig, ax = plt.subplots(figsize=(8, 4))
-    medie.plot(kind='barh', color=['#4e79a7', '#f28e2b', '#e15759'], ax=ax)
-    ax.set_xlim(1, 4)
-    ax.set_title("Performance per Area Strategica")
-    st.pyplot(fig)
-
-    # Logica di salvataggio (Necessità tecnica per Drive)
-    # [Qui andrà la funzione salva_su_google_sheet(dati)]
-    st.success(f"Grazie {nome}, i tuoi risultati sono stati elaborati.")
+    st.subheader("I Tuoi Risultati")
+    st.pyplot(draw_gauge(totale)) # Visualizzazione tachimetro
+    
+    # Feedback descrittivo
+    profili = {
+        "Operatore Reattivo": "Tendi a focalizzarti sul 'Come' immediato e sulla correzione dell'errore. È opportuno spostare l'attenzione sul 'Perché' strategico.",
+        "Gestore Consapevole": "Distingui tra necessità e opportunità, ma potresti essere più rapido nel riconoscere la condotta più opportuna prima di correggere.",
+        "Leader Motivatore": "Ottimo equilibrio. Segui il flusso logico del merito e sai quando valorizzare l'extra-miglio dei tuoi collaboratori.",
+        "Maestro del Merito": "Eccellenza. Il tuo approccio è una guida per il team: riconosci il merito come pilastro della motivazione prima ancora di gestire le criticità."
+    }
+    
+    if totale <= 18: l = "Operatore Reattivo"
+    elif totale <= 30: l = "Gestore Consapevole"
+    elif totale <= 42: l = "Leader Motivatore"
+    else: l = "Maestro del Merito"
+    
+    st.markdown(f"**Profilo: {l}**")
+    st.write(profili[l])
+    st.success(f"Dati di {nome} registrati con successo per il salvataggio su Drive.")
