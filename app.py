@@ -41,20 +41,20 @@ st.subheader("Questionario di Autovalutazione")
 
 items = [
     # Area 1: Flusso Strategico (Dove-Perché-Come)
-    "Chiarisco il 'Dove' (obiettivo strategico) e il 'Perché' prima di spiegare il 'Come' operativo?",
-    "Mi assicuro che il collaboratore comprenda il senso profondo del suo compito prima di iniziare?",
-    "Dopo aver definito il 'Come', spiego 'come posso fare così' per favorire l'autonomia futura?",
-    "Verifico che la visione d'insieme sia chiara prima di scendere nei minimi dettagli tecnici?",
+    "Chiarisco sempre l'obiettivo strategico (il 'Dove') e le sue ragioni (il 'Perché') prima di spiegare il 'Come' operativo?",
+    "Mi assicuro che il collaboratore possa comprendere il senso profondo del suo compito prima di iniziarlo?",
+    "Dopo aver definito cosa si debba fare, mi preoccupo di chiarire 'come si possa fare così' per favorire l'apprendimento e la futura autonomia?",
+    "Verifico che la visione d'insieme sia chiara prima di scendere nei dettagli tecnico-operativi?",
     # Area 2: Necessità vs Opportunità
-    "Distinguo chiaramente tra un compito svolto per adempimento (necessità) e uno per iniziativa (opportunità)?",
-    "Sono consapevole delle conseguenze quando una 'necessità' non negoziabile viene ignorata?",
-    "Riconosco un valore superiore a chi coglie 'opportunità' di miglioramento oltre il dovuto?",
-    "Nelle valutazioni, separo il rispetto delle procedure dal valore aggiunto generato?",
+    "Distinguo chiaramente tra un compito svolto per necessità o dovere (adempimento) e uno per opportunità e senso?",
+    "Sono consapevole delle conseguenze che occorrono quando una necessità non negoziabile viene ignorata?",
+    "Riconosco un valore superiore a chi coglie una 'opportunità' di miglioramento che vanno oltre il dovuto?",
+    "Nelle valutazioni, sono in grado di riconoscere il rispetto delle procedure dal valore aggiunto generato?",
     # Area 3: ASAP e Riconoscimento
     "Intervengo al più presto per correggere una non conformità tecnica rilevata?",
-    "Segnalo prontamente (ASAP) una condotta inopportuna prima che diventi una prassi?",
-    "Riconosco la condotta corretta e opportuna PRIMA di far notare eventuali errori?",
-    "Do priorità alla validazione del buon operato rispetto alla mera sanzione della svista?"
+    "Segnalo prontamente una condotta inopportuna per evitare che diventi una prassi abituale?",
+    "Quando do un feedback mi ricordo di riconoscere le condotte corrette e opportune PRIMA di far notare eventuali errori?",
+    "Sono capace di dare prorità alla validazione del buon operato rispetto alla sanzione degli errori?"
 ]
 
 mappa_punti = {"Mai": 1, "Quasi mai": 2, "Spesso": 3, "Sempre": 4}
