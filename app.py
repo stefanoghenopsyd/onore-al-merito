@@ -16,14 +16,14 @@ with col_logo:
     except:
         st.info("Caricare 'GENERA Logo Colore.png' nella cartella principale.")
 
-st.markdown("<h1 style='text-align: center;'>L'Arte del Riconoscimento del Merito</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>The Appreciation Quotient</h1>", unsafe_allow_html=True)
 
 # --- 3. PARTE INTRODUTTIVA ---
 st.markdown("""
-### L'importanza del Merito nella Motivazione
-Riconoscere il merito dei propri collaboratori non è un semplice accessorio, ma il cuore pulsante della motivazione. Saper dare un feedback circa il valore del contributo portato, distinguendo tra ciò che è **necessario** e ciò che è **opportuno**, e saper guidare il team attraverso il 'Perché' prima del 'Come', definisce la qualità della leadership.
+### L'importanza del Riconoscimento nella Motivazione
+Tutti vogliamo essere visti. Riconoscere il merito dei propri collaboratori non è un semplice accessorio, ma il cuore pulsante della motivazione. Saper dare un feedback circa il valore del contributo portato, distinguendo tra ciò che è **necessario** e ciò che è **opportuno**, e saper guidare il team attraverso il 'Perché' prima del 'Come', definisce la qualità della leadership.
 
-**Obiettivo:** Valutare la tua capacità di gestire il merito come leva strategica per il sostegno alla motivazione, lo sviluppo del talento e la tenuta del clima aziendale.
+**Obiettivo:** Valutare la tua capacità di offrire un riconoscimento come leva strategica per il sostegno alla motivazione, lo sviluppo del talento e la tenuta del clima aziendale.
 """)
 
 # --- 4. INFORMAZIONI SOCIO-ANAGRAFICHE ---
